@@ -2,7 +2,6 @@ package org.insa.graphs.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -30,15 +29,15 @@ public class Path {
     public static Path createFastestPathFromNodes(Graph graph, List<Node> nodes)
             throws IllegalArgumentException {
     	
-        if (connectedNodesList(nodes)) { throw new IllegalArgumentException(); }
+        if (!connectedNodesList(nodes)) { throw new IllegalArgumentException(); }
 
         List<Arc> arcs = new ArrayList<Arc>();
-        int minTime = 0;
-        Arc minArc;
+        double minTime = 0;
+        Arc minArc = null;
 
         for (int i = 0; i< nodes.size()-1; i++) {
 
-            for (Arc a : nodes.get(i).getSuccessors) {
+            for (Arc a : nodes.get(i).getSuccessors()) {
 
                 if (a.getDestination().equals(nodes.get(i+1))) {
                     if (minTime == 0) {
@@ -49,7 +48,9 @@ public class Path {
                         minArc = a;
                     }
                 }
-                arcs.add(minArc);
+                
+                if (minArc != null) {arcs.add(minArc);}
+                minTime = 0; minArc = null;
 
             }
         }   
@@ -69,15 +70,16 @@ public class Path {
      *         consecutive nodes in the list are not connected in the graph.
      */
     public static Path createShortestPathFromNodes(Graph graph, List<Node> nodes) throws IllegalArgumentException {
-        if (connectedNodesList(nodes)) { throw new IllegalArgumentException(); }
+        
+    	if (!connectedNodesList(nodes)) { throw new IllegalArgumentException(); }
 
         List<Arc> arcs = new ArrayList<Arc>();
-        int minLength = 0;
-        Arc minArc;
+        float minLength = 0;
+        Arc minArc = null;
 
         for (int i = 0; i< nodes.size()-1; i++) {
 
-            for (Arc a : nodes.get(i).getSuccessors) {
+            for (Arc a : nodes.get(i).getSuccessors()) {
 
                 if (a.getDestination().equals(nodes.get(i+1))) {
                     if (minLength == 0) {
@@ -88,7 +90,9 @@ public class Path {
                         minArc = a;
                     }
                 }
-                arcs.add(minArc);
+                
+                if (minArc != null) {arcs.add(minArc);}
+                minLength = 0; minArc = null;
 
             }
         }   
@@ -231,7 +235,7 @@ public class Path {
      */
     public boolean isValid() {
         
-        if (this.origin.equals(null)) {
+        if (this.origin == null) {
         	return true;
         }
         
@@ -273,7 +277,7 @@ public class Path {
      *         kilometers-per-hour).
      */
     public double getTravelTime(double speed) {
-    	return (this.getLength()/speed)*3600;
+    	return ((this.getLength()/1000)/speed)*3600;
     }
 
     /**
@@ -285,7 +289,7 @@ public class Path {
     public double getMinimumTravelTime() {
     	double travelTime = 0;
     	for (Arc a : arcs) {
-    		travelTime += (a.getLength()/a.getRoadInformation().getMaximumSpeed())/3600;
+    		travelTime += a.getMinimumTravelTime();
     	}
     	return travelTime;
     }
