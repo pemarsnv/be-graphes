@@ -295,33 +295,20 @@ public class Path {
     }
     
     public static boolean connectedNodesList(List<Node> nodes) {
-    	Node nf = nodes.get(0); Node nl;
-    	boolean co = true; int i = 0;
-    	while (co || i < nodes.size() - 1) {
-    		co = connectedSingleNode(nf, nodes.get(i));
-    	}
-    	return co;
+    	
+        for (int i = 0; i<nodes.size()-1; i++) {
+            if (!connectedSingleNode(nodes.get(i), nodes.get(i+1))) { return false; }
+        }
+        return true;
+
     }
     
     public static boolean connectedSingleNode(Node n1, Node n2) {
     	
-    	boolean co = false;
-    	boolean remaining = true; 
-    	ArrayList<Arc> arcs = new ArrayList<>();
-    	ArrayList<Node> nodes = new ArrayList<>();
-    	nodes.add(n1);
-    	while (!co || remaining) {
-    		for (Node n : nodes) {
-    			arcs.addAll(n.getSuccessors());
-    		}
-    		for (Arc a : arcs) {
-    			nodes.add(a.getDestination());
-    		}
-    		co = nodes.contains(n2);
-    		remaining = arcs.isEmpty();
-    		arcs.clear();
-    	}
-    	return co;
+        for (Arc a : n1.getSuccessors())  {
+            if (a.getDestination().equals(n2)) { return true; }
+        }
+        return false;
     	
     }
 
