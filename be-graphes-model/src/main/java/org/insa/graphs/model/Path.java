@@ -2,6 +2,7 @@ package org.insa.graphs.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -29,11 +30,19 @@ public class Path {
      */
     public static Path createFastestPathFromNodes(Graph graph, List<Node> nodes)
             throws IllegalArgumentException {
+    	
+        if (connectedNodesList(nodes)) { throw new IllegalArgumentException(); }
+        
         List<Arc> arcs = new ArrayList<Arc>();
-        // TODO:
+        
+        HashMap<Node, Node> mapPredecessor = new HashMap<>();
+        HashMap<Node, Double> mapTime = new HashMap<>();
+        
+        
+        
         return new Path(graph, arcs);
     }
-
+    
     /**
      * Create a new path that goes through the given list of nodes (in order), choosing
      * the shortest route if multiple are available.
@@ -184,22 +193,42 @@ public class Path {
      * </ul>
      *
      * @return true if the path is valid, false otherwise.
-     * @deprecated Need to be implemented.
      */
     public boolean isValid() {
-        // TODO:
-        return false;
+    	
+        boolean valid = false;
+        
+        if (this.origin.equals(null)) {
+        	valid = true;
+        }
+        
+        if (this.arcs.isEmpty()) {
+        	valid = true;
+        }
+        
+        Arc firstArc = this.arcs.get(0);
+        Arc secondArc = this.arcs.get(1);
+        Arc thirdArc = this.arcs.get(2);
+        if (firstArc.getDestination().equals(secondArc.getOrigin()) 
+        		&& secondArc.getDestination().equals(thirdArc.getOrigin())) {
+        	valid = true; 
+        }
+        
+        return valid;
+        
     }
 
     /**
      * Compute the length of this path (in meters).
      *
      * @return Total length of the path (in meters).
-     * @deprecated Need to be implemented.
      */
     public float getLength() {
-        // TODO:
-        return 0;
+    	float length = 0;
+    	for (Arc a : arcs) {
+    		length += a.getLength();
+    	}
+    	return length;
     }
 
     /**
@@ -208,11 +237,9 @@ public class Path {
      * @param speed Speed to compute the travel time.
      * @return Time (in seconds) required to travel this path at the given speed (in
      *         kilometers-per-hour).
-     * @deprecated Need to be implemented.
      */
     public double getTravelTime(double speed) {
-        // TODO:
-        return 0;
+    	return (this.getLength()/speed)*3600;
     }
 
     /**
@@ -220,11 +247,44 @@ public class Path {
      * every arc.
      *
      * @return Minimum travel time to travel this path (in seconds).
-     * @deprecated Need to be implemented.
      */
     public double getMinimumTravelTime() {
-        // TODO:
-        return 0;
+    	double travelTime = 0;
+    	for (Arc a : arcs) {
+    		travelTime += (a.getLength()/a.getRoadInformation().getMaximumSpeed())/3600;
+    	}
+    	return travelTime;
+    }
+    
+    public static boolean connectedNodesList(List<Node> nodes) {
+    	Node nf = nodes.get(0); Node nl;
+    	boolean co = true; int i = 0;
+    	while (co || i < nodes.size() - 1) {
+    		co = connectedSingleNode(nf, nodes.get(i));
+    	}
+    	return co;
+    }
+    
+    public static boolean connectedSingleNode(Node n1, Node n2) {
+    	
+    	boolean co = false;
+    	boolean remaining = true; 
+    	ArrayList<Arc> arcs = new ArrayList<>();
+    	ArrayList<Node> nodes = new ArrayList<>();
+    	nodes.add(n1);
+    	while (!co || remaining) {
+    		for (Node n : nodes) {
+    			arcs.addAll(n.getSuccessors());
+    		}
+    		for (Arc a : arcs) {
+    			nodes.add(a.getDestination());
+    		}
+    		co = nodes.contains(n2);
+    		remaining = arcs.isEmpty();
+    		arcs.clear();
+    	}
+    	return co;
+    	
     }
 
 }
