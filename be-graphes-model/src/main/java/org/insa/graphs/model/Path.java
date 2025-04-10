@@ -30,12 +30,18 @@ public class Path {
             throws IllegalArgumentException {
     	
         if (!connectedNodesList(nodes)) { throw new IllegalArgumentException(); }
-
+        
+        if (nodes.size() == 1) {
+    		return new Path(graph, nodes.get(0));
+    	}
+        
         List<Arc> arcs = new ArrayList<Arc>();
         double minTime = 0;
         Arc minArc = null;
 
         for (int i = 0; i< nodes.size()-1; i++) {
+        	
+        	System.out.println("prout");
 
             for (Arc a : nodes.get(i).getSuccessors()) {
 
@@ -48,13 +54,15 @@ public class Path {
                         minArc = a;
                     }
                 }
-                
-                if (minArc != null) {arcs.add(minArc);}
-                minTime = 0; minArc = null;
 
             }
+            
+            if (minArc != null) {arcs.add(minArc);}
+            minTime = 0; minArc = null;
+            
         }   
-
+        
+        System.out.println(arcs.size());
         return new Path(graph, arcs);
 
     }
@@ -72,6 +80,10 @@ public class Path {
     public static Path createShortestPathFromNodes(Graph graph, List<Node> nodes) throws IllegalArgumentException {
         
     	if (!connectedNodesList(nodes)) { throw new IllegalArgumentException(); }
+    	
+    	if (nodes.size() == 1) {
+    		return new Path(graph, nodes.get(0));
+    	}
 
         List<Arc> arcs = new ArrayList<Arc>();
         float minLength = 0;
@@ -90,11 +102,12 @@ public class Path {
                         minArc = a;
                     }
                 }
-                
-                if (minArc != null) {arcs.add(minArc);}
-                minLength = 0; minArc = null;
 
             }
+            
+            if (minArc != null) {arcs.add(minArc);}
+            minLength = 0; minArc = null;
+            
         }   
 
         return new Path(graph, arcs);
