@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 
 import javax.swing.JFrame;
@@ -44,12 +45,19 @@ public class Launch {
 
     public static void main(String[] args) throws Exception {
 
-        // visit these directory to see the list of available files on commetud.
+        // visit these directory to see the list of available files on commetud
 
         final String mapName =
-                "maps/insa.mapgr";
+        		"../maps/insa.mapgr";
+        
+        File fichier = new File(mapName);
+        System.out.println("Chemin du fichier : " + fichier.getAbsolutePath());
+        System.out.println("Existe ? " + fichier.exists());
+        System.out.println("Lisible ? " + fichier.canRead());
+        System.out.println("Répertoire courant : " + System.getProperty("user.dir"));
+        
         final String pathName =
-                "paths/path_fr31insa_rangueil_r2.path";
+                "../paths/path_fr31insa_rangueil_r2.path";
 
         final Graph graph;
         final Path path;
@@ -58,16 +66,18 @@ public class Launch {
         try (final GraphReader reader = new BinaryGraphReader(new DataInputStream(
                 new BufferedInputStream(new FileInputStream(mapName))))) {
 
-            // TODO: read the graph
-            graph = null;
+            //read the graph
+            graph = reader.read();
         }
 
         // create the drawing
         final Drawing drawing = createDrawing();
 
-        // TODO: draw the graph on the drawing
+        //draw the graph on the drawing
+        drawing.drawGraph(graph);
 
         // TODO: create a path reader
+        
         try (final PathReader pathReader = null) {
 
             // TODO: read the path
