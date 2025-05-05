@@ -33,6 +33,10 @@ This is an INSA local copy of [Mikael CAPELLE's repository](https://gitea.typena
     git push
     ```
 
-L'UML des objets principales (Graph, Node, Arc, Path, RoadInformation)
+L'UML des objets principaux (Graph, Node, Arc, Path, RoadInformation)
 
 https://lucid.app/lucidchart/d8f1783c-5afc-4c3e-8fa0-8c4194d0b662/edit?viewport_loc=-14%2C204%2C1993%2C915%2CHWEp-vi-RSFO&invitationId=inv_fc8753ca-0204-4463-8cea-887d1ac7f58e
+
+L'UML des packages Algos et AlgosShortestPath
+
+https://lucid.app/lucidchart/15a51df5-6f4d-4a53-8f23-e8330ea23e1a/edit?viewport_loc=-3807%2C-5713%2C3268%2C1417%2C0_0&invitationId=inv_1db7e098-bba9-490f-aa79-19bb63147caa
