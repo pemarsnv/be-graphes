@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Base class for algorithm classes.
  *
  * @param <Observer> Observer type for the algorithm.
- */
+ */  
 public abstract class AbstractAlgorithm<Observer> {
 
     // Input data for the algorithm
@@ -60,6 +60,7 @@ public abstract class AbstractAlgorithm<Observer> {
     public AbstractInputData getInputData() {
         return data;
     }
+    
 
     /**
      * Run the algorithm and return the solution. This methods internally time the call

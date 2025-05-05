@@ -1,9 +1,14 @@
 package org.insa.graphs.algorithm.shortestpath;
 
+import org.insa.graphs.model.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.insa.graphs.model.Arc;
 import org.insa.graphs.model.Graph;
+import org.insa.graphs.algorithm.utils.BinaryHeap;
+import org.insa.graphs.algorithm.AbstractSolution.Status;
 
 public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
@@ -19,16 +24,69 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         final ShortestPathData data = getInputData();
         Graph graph = data.getGraph();
         int nbNodes = graph.size();
-        double[] distances = new double[nbNodes];
-        Arrays.fill(distances, Double.POSITIVE_INFINITY);
-        distances[data.getOrigin().getId()] = 0;
+
+        // donnees pour l'algorithme
+        Label nodeToTab;
+        int origin, destination;
+
         notifyOriginProcessed(data.getOrigin());
-        Arc[] predecessorArcs = new Arc[nbNodes];
 
+        Label[] labels = new Label[nbNodes];
+        for (int i = 0; i < nbNodes; i++) {
+            labels[i] = null;
+        }
+
+        //create a binary heap to store the labels
+        BinaryHeap<Label> heap = new BinaryHeap <Label>();
+        nodeToTab = new Label(data.getOrigin().getId(), false, 0, null);
+        labels[nodeToTab.getSommetCourant()] = nodeToTab;
+        heap.insert(nodeToTab);
+
+        while (!heap.isEmpty()) {
+
+            // on prend le sommet de plus petite valeur dans le tas, donc la racine du tas
+            Label currentLabel = heap.deleteMin();
+            currentLabel.setMarque(true); // on le marque comme traité
+
+            for (Arc arc : graph.get(currentLabel.getSommetCourant()).getSuccessors()) {
+                nodeToTab = new Label(arc.getDestination().getId(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength(), arc);
+                int sommetCourant = nodeToTab.getSommetCourant();
+                if (labels[sommetCourant] == null) {
+                    labels[sommetCourant] = nodeToTab;
+                    heap.insert(nodeToTab);
+                }
+                if (labels[sommetCourant].getCoutRealise() > nodeToTab.getCoutRealise() && !labels[sommetCourant].getMarque()) {
+                    labels[sommetCourant].setCoutRealise(nodeToTab.getCoutRealise());
+                    labels[sommetCourant].setPere(arc);
+                }
+            }                 
+        }
+
+        //On regarde si le sommet destination est atteint
+        destination = data.getDestination().getId();
+        Status status = Status.OPTIMAL;
+        if (labels[destination] == null) {
+        status = Status.INFEASIBLE;
+        } 
+        
+        //construct the path from the labels
+        Arc currentArc = labels[destination].getPere();
+        List<Arc> path = new ArrayList<Arc>();
+
+
+        while (currentArc != null) {
+            path.add(currentArc);
+            currentArc = labels[currentArc.getOrigin().getId()].getPere();
+        }
+
+        //reverse the path
+        path.reversed();
+        
         // variable that will contain the solution of the shortest path problem
-        ShortestPathSolution solution = null;
+        ShortestPathSolution solution = new ShortestPathSolution(data, status, new Path(graph, path));
+        
 
-        // TODO: implement the Dijkstra algorithm
+
 
         // when the algorithm terminates, return the solution that has been found
         return solution;
