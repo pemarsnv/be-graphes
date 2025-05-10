@@ -2,7 +2,6 @@ package org.insa.graphs.algorithm.shortestpath;
 
 import org.insa.graphs.model.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.insa.graphs.model.Arc;
@@ -27,7 +26,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
         // donnees pour l'algorithme
         Label nodeToTab;
-        int origin, destination;
+        int destination;
 
         notifyOriginProcessed(data.getOrigin());
 
