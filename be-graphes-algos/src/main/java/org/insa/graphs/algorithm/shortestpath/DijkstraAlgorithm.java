@@ -51,16 +51,18 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         while (!heap.isEmpty() && (labels[destination] == null || !labels[destination].getMarque())) {
         	
             for (Arc arc : graph.get(currentLabel.getSommetCourant()).getSuccessors()) {
-                nodeToTab = new Label(arc.getDestination().getId(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength(), arc);
-                int sommetCourant = nodeToTab.getSommetCourant();
-                if (labels[sommetCourant] == null) {
-                    labels[sommetCourant] = nodeToTab;
-                    heap.insert(nodeToTab);
-                }
-                if (labels[sommetCourant].getCoutRealise() > nodeToTab.getCoutRealise() && !labels[sommetCourant].getMarque()) {
-                    labels[sommetCourant].setCoutRealise(nodeToTab.getCoutRealise());
-                    labels[sommetCourant].setPere(arc);
-                }
+            	if (data.isAllowed(arc)) {
+            		nodeToTab = new Label(arc.getDestination().getId(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength(), arc);
+                    int sommetCourant = nodeToTab.getSommetCourant();
+                    if (labels[sommetCourant] == null) {
+                        labels[sommetCourant] = nodeToTab;
+                        heap.insert(nodeToTab);
+                    }
+                    if (labels[sommetCourant].getCoutRealise() > nodeToTab.getCoutRealise() && !labels[sommetCourant].getMarque()) {
+                        labels[sommetCourant].setCoutRealise(nodeToTab.getCoutRealise());
+                        labels[sommetCourant].setPere(arc);
+                    }
+            	}
             }    
             
             // on prend le sommet de plus petite valeur dans le tas, donc la racine du tas
@@ -89,6 +91,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
             //reverse the path
             Collections.reverse(path);
+            
         }
         
         
