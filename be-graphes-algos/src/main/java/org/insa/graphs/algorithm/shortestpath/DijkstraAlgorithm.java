@@ -2,6 +2,7 @@ package org.insa.graphs.algorithm.shortestpath;
 
 import org.insa.graphs.model.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.insa.graphs.model.Arc;
@@ -40,13 +41,21 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         nodeToTab = new Label(data.getOrigin().getId(), false, 0, null);
         labels[nodeToTab.getSommetCourant()] = nodeToTab;
         heap.insert(nodeToTab);
+        
+        destination = data.getDestination().getId();
+        
+        // on prend le sommet de plus petite valeur dans le tas, donc la racine du tas
+        Label currentLabel = heap.deleteMin();
+        currentLabel.setMarque(true); // on le marque comme traité
+        
+        System.out.println("destination "+destination);
+        System.out.println(labels[destination]);
+        System.out.println(labels[destination].getMarque());
 
-        while (!heap.isEmpty()) {
-
-            // on prend le sommet de plus petite valeur dans le tas, donc la racine du tas
-            Label currentLabel = heap.deleteMin();
-            currentLabel.setMarque(true); // on le marque comme traité
-
+        while (!heap.isEmpty() && (labels == null || !labels[destination].getMarque())) {
+        	
+        	System.out.println(currentLabel.getSommetCourant());
+			
             for (Arc arc : graph.get(currentLabel.getSommetCourant()).getSuccessors()) {
                 nodeToTab = new Label(arc.getDestination().getId(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength(), arc);
                 int sommetCourant = nodeToTab.getSommetCourant();
@@ -58,7 +67,13 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                     labels[sommetCourant].setCoutRealise(nodeToTab.getCoutRealise());
                     labels[sommetCourant].setPere(arc);
                 }
-            }                 
+            }    
+            
+            // on prend le sommet de plus petite valeur dans le tas, donc la racine du tas
+             // on le marque comme traité
+            currentLabel = heap.deleteMin();
+			currentLabel.setMarque(true);
+            
         }
 
         //On regarde si le sommet destination est atteint
@@ -69,6 +84,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         } 
         
         //construct the path from the labels
+        
         Arc currentArc = labels[destination].getPere();
         List<Arc> path = new ArrayList<Arc>();
 
@@ -79,7 +95,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         }
 
         //reverse the path
-        path.reversed();
+        Collections.reverse(path);
         
         // variable that will contain the solution of the shortest path problem
         ShortestPathSolution solution = new ShortestPathSolution(data, status, new Path(graph, path));
