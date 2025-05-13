@@ -47,15 +47,9 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         // on prend le sommet de plus petite valeur dans le tas, donc la racine du tas
         Label currentLabel = heap.deleteMin();
         currentLabel.setMarque(true); // on le marque comme traité
-        
-        System.out.println("destination "+destination);
-        System.out.println(labels[destination]);
-        System.out.println(labels[destination].getMarque());
 
         while (!heap.isEmpty() && (labels == null || !labels[destination].getMarque())) {
         	
-        	System.out.println(currentLabel.getSommetCourant());
-			
             for (Arc arc : graph.get(currentLabel.getSommetCourant()).getSuccessors()) {
                 nodeToTab = new Label(arc.getDestination().getId(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength(), arc);
                 int sommetCourant = nodeToTab.getSommetCourant();
@@ -79,23 +73,24 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         //On regarde si le sommet destination est atteint
         destination = data.getDestination().getId();
         Status status = Status.OPTIMAL;
+        Arc currentArc;
+        List<Arc> path = new ArrayList<Arc>();;
+        
         if (labels[destination] == null) {
-        status = Status.INFEASIBLE;
-        } 
-        
-        //construct the path from the labels
-        
-        Arc currentArc = labels[destination].getPere();
-        List<Arc> path = new ArrayList<Arc>();
+        	status = Status.INFEASIBLE;
+        } else {
+        	
+        	currentArc = labels[destination].getPere();
 
+            while (currentArc != null) {
+                path.add(currentArc);
+                currentArc = labels[currentArc.getOrigin().getId()].getPere();
+            }
 
-        while (currentArc != null) {
-            path.add(currentArc);
-            currentArc = labels[currentArc.getOrigin().getId()].getPere();
+            //reverse the path
+            Collections.reverse(path);
         }
-
-        //reverse the path
-        Collections.reverse(path);
+        
         
         // variable that will contain the solution of the shortest path problem
         ShortestPathSolution solution = new ShortestPathSolution(data, status, new Path(graph, path));
