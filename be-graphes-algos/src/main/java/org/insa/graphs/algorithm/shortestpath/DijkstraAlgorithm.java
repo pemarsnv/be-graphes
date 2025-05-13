@@ -56,6 +56,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             		nodeToTab = new Label(arc.getDestination().getId(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength(), arc);
                     int sommetCourant = nodeToTab.getSommetCourant();
                     if (labels[sommetCourant] == null) {
+                    	notifyNodeReached(data.getGraph().get(sommetCourant));
                         labels[sommetCourant] = nodeToTab;
                         heap.insert(nodeToTab);
                     }
@@ -70,6 +71,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             // on le marque comme traité
             currentLabel = heap.deleteMin();
 			currentLabel.setMarque(true);
+			notifyNodeMarked(data.getGraph().get(currentLabel.getSommetCourant()));
             
         }
 
@@ -82,6 +84,8 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         if (labels[destination] == null) {
         	status = Status.INFEASIBLE;
         } else {
+        	
+        	notifyDestinationReached(data.getGraph().get(destination));
         	
         	currentArc = labels[destination].getPere();
 
