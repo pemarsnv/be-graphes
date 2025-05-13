@@ -45,10 +45,10 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         destination = data.getDestination().getId();
         
         // on prend le sommet de plus petite valeur dans le tas, donc la racine du tas
-        Label currentLabel = heap.deleteMin();
+        Label currentLabel = heap.findMin();
         currentLabel.setMarque(true); // on le marque comme traité
 
-        while (!heap.isEmpty() && (labels == null || !labels[destination].getMarque())) {
+        while (!heap.isEmpty() && (labels[destination] == null || !labels[destination].getMarque())) {
         	
             for (Arc arc : graph.get(currentLabel.getSommetCourant()).getSuccessors()) {
                 nodeToTab = new Label(arc.getDestination().getId(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength(), arc);
@@ -64,7 +64,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             }    
             
             // on prend le sommet de plus petite valeur dans le tas, donc la racine du tas
-             // on le marque comme traité
+            // on le marque comme traité
             currentLabel = heap.deleteMin();
 			currentLabel.setMarque(true);
             
@@ -74,7 +74,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         destination = data.getDestination().getId();
         Status status = Status.OPTIMAL;
         Arc currentArc;
-        List<Arc> path = new ArrayList<Arc>();;
+        List<Arc> path = new ArrayList<Arc>();
         
         if (labels[destination] == null) {
         	status = Status.INFEASIBLE;
@@ -94,9 +94,6 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         
         // variable that will contain the solution of the shortest path problem
         ShortestPathSolution solution = new ShortestPathSolution(data, status, new Path(graph, path));
-        
-
-
 
         // when the algorithm terminates, return the solution that has been found
         return solution;
