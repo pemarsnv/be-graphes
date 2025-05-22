@@ -22,7 +22,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 	protected Label[] labels;
 	protected BinaryHeap<Label> heap;
 
-    public DijkstraAlgorithm(ShortestPathData data) {
+    public DijkstraAlgorithm(ShortestPathData data) { 
         super(data);
     }
     
@@ -64,7 +64,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     }
 
     @Override
-    protected ShortestPathSolution doRun() {
+    protected ShortestPathSolution doRun() {// probleme au remove de la heap, peut etre refaire entierement l'algo
 
         //On récupère les données de l'input
         this.data = getInputData();
