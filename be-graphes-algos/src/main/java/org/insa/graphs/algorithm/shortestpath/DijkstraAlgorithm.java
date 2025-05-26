@@ -34,9 +34,9 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         }
         this.heap = new BinaryHeap <Label>();
         
-        nodeToTab = new Label(data.getOrigin(), false, 0, null);
+        Label nodeToTab = new Label(data.getOrigin(), false, 0, null);
         this.insertLabel(nodeToTab);
-        heap.insert(nodeToTab);
+        heap.insert(nodeToTab); 
         destination = data.getDestination().getId();
         
     }
@@ -46,55 +46,51 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     }
     
     public void treatArc(Arc arc) {
-    	
-    	nodeToTab = new Label(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength(), arc);
-        int sommetCourant = nodeToTab.getSommetCourant();
-            
+        int sommetCourant = arc.getDestination().getId();
         if (labels[sommetCourant] == null) {
+            nodeToTab = new Label(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength(), arc);
          	notifyNodeReached(data.getGraph().get(sommetCourant));
             labels[sommetCourant] = nodeToTab;
             heap.insert(nodeToTab);
-       }
-            
-        if (labels[sommetCourant].getCoutTotal() > nodeToTab.getCoutTotal() && !labels[sommetCourant].getMarque()) {
-          	labels[sommetCourant].setCoutRealise(nodeToTab.getCoutRealise());
+       } 
+        else if (labels[sommetCourant].getCoutTotal() > labels[arc.getOrigin().getId()].getCoutTotal() + arc.getLength()) {
+          	labels[sommetCourant].setCoutRealise(labels[arc.getOrigin().getId()].getCoutTotal() + arc.getLength());
             labels[sommetCourant].setPere(arc);
         }
     	
     }
 
     @Override
-    protected ShortestPathSolution doRun() {// probleme au remove de la heap, peut etre refaire entierement l'algo
+    protected ShortestPathSolution doRun() { // probleme au remove de la heap, peut etre refaire entierement l'algo
 
         //On récupère les données de l'input
         this.data = getInputData();
         this.graph = data.getGraph();
         this.nbNodes = graph.size();
-
+ 
         notifyOriginProcessed(data.getOrigin());
         
         //On crée un tableau et un BinaryHeap pour stocker les labels
         this.initiliazeLabels(this.nbNodes);
         
         //On prend et on traite la racine du tas 
-        Label currentLabel = heap.findMin();
-        currentLabel.setMarque(true);
+        Label currentLabel;
 
         //Tant qu'il nous reste des labels à traiter et qu'on a pas atteint et marqué la destination...
-        while (!heap.isEmpty() && (labels[destination] == null || !labels[destination].getMarque())) {
-        	
-        	//On va parcourir tous les arcs
-            for (Arc arc : graph.get(currentLabel.getSommetCourant()).getSuccessors()) {
-            	if (data.isAllowed(arc)) this.treatArc(arc);
-            }    
-            
+        do {
             // on prend le sommet de plus petite valeur dans le tas, donc la racine du tas
             // on le marque comme traité
             currentLabel = heap.deleteMin();
 			currentLabel.setMarque(true);
+            labels[currentLabel.getSommetCourant()].setMarque(true);
+            //On notifie le sommet traité
 			notifyNodeMarked(data.getGraph().get(currentLabel.getSommetCourant()));
-            
-        }
+
+        	//On va parcourir tous les arcs
+            for (Arc arc : graph.get(currentLabel.getSommetCourant()).getSuccessors()) {
+            	if (data.isAllowed(arc)) this.treatArc(arc);
+            }         
+        } while (!heap.isEmpty() && (labels[destination] == null || !labels[destination].getMarque()));
 
         //On regarde si le sommet destination est atteint
         destination = data.getDestination().getId();
