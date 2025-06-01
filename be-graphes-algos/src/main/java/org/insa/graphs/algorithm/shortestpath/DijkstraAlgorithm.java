@@ -8,6 +8,7 @@ import java.util.List;
 import org.insa.graphs.model.Arc;
 import org.insa.graphs.model.Graph;
 import org.insa.graphs.algorithm.utils.BinaryHeap;
+import org.insa.graphs.algorithm.AbstractInputData.Mode;
 import org.insa.graphs.algorithm.AbstractSolution.Status;
 
 public class DijkstraAlgorithm extends ShortestPathAlgorithm {
@@ -48,8 +49,12 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     public void treatArc(Arc arc) {
         int sommetCourant = arc.getDestination().getId();
         if (labels[sommetCourant] == null) {
-            nodeToTab = new Label(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength(), arc);
-         	notifyNodeReached(data.getGraph().get(sommetCourant));
+        	if (this.data.getMode().equals(Mode.TIME)) {
+        		nodeToTab = new Label(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getMinimumTravelTime(), arc);
+        	} else {
+        		nodeToTab = new Label(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength(), arc);
+        	}
+            notifyNodeReached(data.getGraph().get(sommetCourant));
             labels[sommetCourant] = nodeToTab;
             heap.insert(nodeToTab);
        } 

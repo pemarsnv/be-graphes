@@ -18,15 +18,6 @@ public class Label implements Comparable<Label> {
 		this.coutRealise = coutRealise;
 		this.pere = pere;		
 	}
-
-	/*
-	public Label(int sommetCourant, boolean marque, double coutRealise, Arc pere) {
-		this.sommetCourant = sommetCourant;
-		this.marque = marque;
-		this.coutRealise = coutRealise;
-		this.pere = pere;	
-	}
-	*/
 	
 	public Node getNode() {
 		return this.node;
@@ -65,6 +56,9 @@ public class Label implements Comparable<Label> {
 	}
 	
 	public double getCout() {
+		if (pere == null) {
+			return 0;
+		}
 		return pere.getLength();
 	}
 

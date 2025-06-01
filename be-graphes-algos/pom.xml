@@ -17,7 +17,7 @@
 		<dependency>
 			<groupId>org.insa.graphs</groupId>
 			<artifactId>be-graphes-model</artifactId>
-			<version>${project.version}</version>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 
