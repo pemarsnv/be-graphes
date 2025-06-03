@@ -55,8 +55,7 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
          	} else {
         		this.nodeToTab = new LabelStar(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength(), arc, data.getDestination());
          	}
-            this.nodeToTab = new LabelStar(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength(), arc, data.getDestination());
-         	notifyNodeReached(data.getGraph().get(sommetCourant));
+            notifyNodeReached(data.getGraph().get(sommetCourant));
             labels[sommetCourant] = nodeToTab;
             heap.insert(nodeToTab);
        } 
