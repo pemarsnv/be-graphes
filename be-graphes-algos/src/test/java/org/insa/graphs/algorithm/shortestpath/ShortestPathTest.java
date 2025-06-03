@@ -171,8 +171,8 @@ public class ShortestPathTest {
 	@Test
 	public void testFastestPathPedestrian() {
 		
-		this.origin = graph.get(66);
-		this.destination = graph.get(207);
+		this.origin = graph.get(878);
+		this.destination = graph.get(252);
 		
 		this.data = new ShortestPathData(graph, origin, destination, ArcInspectorFactory.getAllFilters().get(3));
 		
@@ -198,8 +198,8 @@ public class ShortestPathTest {
 	@Test
 	public void testFastestPathAllvsPedestrian() {
 		
-		this.origin = graph.get(1194);
-		this.destination = graph.get(564);
+		this.origin = graph.get(878);
+		this.destination = graph.get(252);
 		
 		//On fait tourner l'algo de Dijkstra en shortest all
 		this.data = new ShortestPathData(graph, origin, destination, ArcInspectorFactory.getAllFilters().get(2));

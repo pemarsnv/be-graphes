@@ -49,27 +49,27 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         
         if (this.data.getMode().equals(Mode.TIME)) {
         	if (labels[sommetCourant] == null) {
-            	nodeToTab = new Label(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getMinimumTravelTime(), arc);
+            	nodeToTab = new Label(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + this.data.getCost(arc), arc);
             	notifyNodeReached(data.getGraph().get(sommetCourant));
                 labels[sommetCourant] = nodeToTab;
                 heap.insert(nodeToTab);
            } 
-            else if (!labels[sommetCourant].getMarque() && labels[sommetCourant].getCoutRealise() > labels[arc.getOrigin().getId()].getCoutRealise() + arc.getMinimumTravelTime()) {
+            else if (!labels[sommetCourant].getMarque() && labels[sommetCourant].getCoutRealise() > labels[arc.getOrigin().getId()].getCoutRealise() + this.data.getCost(arc)) {
               	heap.remove(labels[sommetCourant]);
-            	labels[sommetCourant].setCoutRealise(labels[arc.getOrigin().getId()].getCoutRealise() + arc.getMinimumTravelTime());
+            	labels[sommetCourant].setCoutRealise(labels[arc.getOrigin().getId()].getCoutRealise() + this.data.getCost(arc));
                 labels[sommetCourant].setPere(arc);
                 heap.insert(labels[sommetCourant]);
             }
         } else {
         	if (labels[sommetCourant] == null) {
-        		nodeToTab = new Label(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength(), arc);
+        		nodeToTab = new Label(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + this.data.getCost(arc), arc);
             	notifyNodeReached(data.getGraph().get(sommetCourant));
                 labels[sommetCourant] = nodeToTab;
                 heap.insert(labels[sommetCourant]);
            } 
-            else if (!labels[sommetCourant].getMarque() && labels[sommetCourant].getCoutRealise() > labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength()) {
+            else if (!labels[sommetCourant].getMarque() && labels[sommetCourant].getCoutRealise() > labels[arc.getOrigin().getId()].getCoutRealise() + this.data.getCost(arc)) {
               	heap.remove(labels[sommetCourant]);
-            	labels[sommetCourant].setCoutRealise(labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength());
+            	labels[sommetCourant].setCoutRealise(labels[arc.getOrigin().getId()].getCoutRealise() + this.data.getCost(arc));
                 labels[sommetCourant].setPere(arc);
                 heap.insert(labels[sommetCourant]);
             }
@@ -105,7 +105,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
         	//On va parcourir tous les arcs
             for (Arc arc : graph.get(currentLabel.getSommetCourant()).getSuccessors()) {
-            	if (data.isAllowed(arc)) this.treatArc(arc);
+            	if (this.data.isAllowed(arc)) this.treatArc(arc);
             }         
         } while (!heap.isEmpty() && (labels[destination] == null || !labels[destination].getMarque()));
 
