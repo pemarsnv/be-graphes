@@ -31,9 +31,6 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
     public void initiliazeLabels(int nb) {
     	
     	this.labels = new LabelStar[nb];
-        for (int i = 0; i < nb; i++) {
-            labels[i] = null;
-        }
         this.heap = new BinaryHeap<Label>();
         
         nodeToTab = new LabelStar(data.getOrigin(), false, 0, null, data.getOrigin());
@@ -56,11 +53,11 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
                 labels[sommetCourant] = nodeToTab;
                 heap.insert(nodeToTab);
            } 
-            else if (labels[sommetCourant].getCoutTotal() > labels[arc.getOrigin().getId()].getCoutTotal() + this.data.getCost(arc)) {
-                heap.remove(nodeToTab);
+            else if (!labels[sommetCourant].getMarque() && labels[sommetCourant].getCoutTotal() > labels[arc.getOrigin().getId()].getCoutTotal() + this.data.getCost(arc)) {
+            	heap.remove(labels[sommetCourant]);
               	labels[sommetCourant].setCoutRealise(labels[arc.getOrigin().getId()].getCoutTotal() + this.data.getCost(arc));
                 labels[sommetCourant].setPere(arc);
-                heap.insert(nodeToTab);
+                heap.insert(labels[sommetCourant]);
             }
         } else {
             if (labels[sommetCourant] == null) {
@@ -69,11 +66,11 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
                 labels[sommetCourant] = nodeToTab;
                 heap.insert(nodeToTab);
            } 
-            else if (labels[sommetCourant].getCoutTotal() > labels[arc.getOrigin().getId()].getCoutTotal() + this.data.getCost(arc)) {
-                heap.remove(nodeToTab);
+            else if (!labels[sommetCourant].getMarque() && labels[sommetCourant].getCoutTotal() > labels[arc.getOrigin().getId()].getCoutTotal() + this.data.getCost(arc)) {
+            	heap.remove(labels[sommetCourant]);
               	labels[sommetCourant].setCoutRealise(labels[arc.getOrigin().getId()].getCoutTotal() + this.data.getCost(arc));
                 labels[sommetCourant].setPere(arc);
-                heap.insert(nodeToTab);
+                heap.insert(labels[sommetCourant]);
             }
         }
     }
