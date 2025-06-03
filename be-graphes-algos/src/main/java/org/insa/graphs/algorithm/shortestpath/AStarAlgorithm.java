@@ -49,22 +49,29 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
     
     public void treatArc(Arc arc) {
         int sommetCourant = arc.getDestination().getId();
-        if (labels[sommetCourant] == null) {
-            if (this.data.getMode().equals(Mode.TIME)) {
-        		this.nodeToTab = new LabelStar(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getMinimumTravelTime(), arc, data.getDestination());
-         	} else {
-        		this.nodeToTab = new LabelStar(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength(), arc, data.getDestination());
-         	}
-            notifyNodeReached(data.getGraph().get(sommetCourant));
-            labels[sommetCourant] = nodeToTab;
-            heap.insert(nodeToTab);
-       } 
-        else if (labels[sommetCourant].getCoutRealise() > labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength()) {
-          	labels[sommetCourant].setCoutRealise(labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength());
-            labels[sommetCourant].setPere(arc);
+        if (this.data.getMode().equals(Mode.TIME)) {
+        	if (labels[sommetCourant] == null) {
+            	this.nodeToTab = new LabelStar(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getMinimumTravelTime(), arc, data.getDestination());
+         	    notifyNodeReached(data.getGraph().get(sommetCourant));
+                labels[sommetCourant] = nodeToTab;
+                heap.insert(nodeToTab);
+           } 
+            else if (labels[sommetCourant].getCoutTotal() > labels[arc.getOrigin().getId()].getCoutTotal() + arc.getMinimumTravelTime()) {
+              	labels[sommetCourant].setCoutRealise(labels[arc.getOrigin().getId()].getCoutTotal() + arc.getMinimumTravelTime());
+                labels[sommetCourant].setPere(arc);
+            }
+        } else {
+            if (labels[sommetCourant] == null) {
+        		nodeToTab = new LabelStar(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength(), arc, data.getDestination());
+         	    notifyNodeReached(data.getGraph().get(sommetCourant));
+                labels[sommetCourant] = nodeToTab;
+                heap.insert(nodeToTab);
+           } 
+            else if (labels[sommetCourant].getCoutTotal() > labels[arc.getOrigin().getId()].getCoutTotal() + arc.getLength()) {
+              	labels[sommetCourant].setCoutRealise(labels[arc.getOrigin().getId()].getCoutTotal() + arc.getLength());
+                labels[sommetCourant].setPere(arc);
+            }
         }
-    	
-    	
     }
 
     
