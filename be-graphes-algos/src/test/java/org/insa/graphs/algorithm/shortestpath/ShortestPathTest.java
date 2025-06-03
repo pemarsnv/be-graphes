@@ -161,6 +161,8 @@ public class ShortestPathTest {
 		//On vérifie que la soltuion est bien possible et 
 		//qu'elle est la même que celle trouvée par BellmanFord 
 		assertEquals(solutionD.getStatus(), Status.OPTIMAL);
+		System.out.println(solutionD.getPath().getArcs());
+		System.out.println(solutionB.getPath().getArcs());
 		assertEquals(solutionD.getPath().getArcs(), solutionB.getPath().getArcs());
 			
 	}
@@ -187,6 +189,8 @@ public class ShortestPathTest {
 		//On vérifie que la soltuion est bien possible et 
 		//qu'elle est la même que celle trouvée par BellmanFord 
 		assertEquals(solutionD.getStatus(), Status.OPTIMAL);
+		System.out.println(solutionD.getPath().getArcs());
+		System.out.println(solutionB.getPath().getArcs());
 		assertEquals(solutionD.getPath().getArcs(), solutionB.getPath().getArcs());
 			
 	}

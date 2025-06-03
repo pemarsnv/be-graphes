@@ -53,7 +53,7 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
                 labels[sommetCourant] = nodeToTab;
                 heap.insert(nodeToTab);
            } 
-            else if (!labels[sommetCourant].getMarque() && labels[sommetCourant].getCoutTotal() > labels[arc.getOrigin().getId()].getCoutRealise() + this.data.getCost(arc)) {
+            else if (!labels[sommetCourant].getMarque() && labels[sommetCourant].getCoutRealise() > labels[arc.getOrigin().getId()].getCoutRealise() + this.data.getCost(arc)) {
             	heap.remove(labels[sommetCourant]);
               	labels[sommetCourant].setCoutRealise(labels[arc.getOrigin().getId()].getCoutRealise() + this.data.getCost(arc));
                 labels[sommetCourant].setPere(arc);
@@ -66,7 +66,7 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
                 labels[sommetCourant] = nodeToTab;
                 heap.insert(nodeToTab);
            } 
-            else if (!labels[sommetCourant].getMarque() && labels[sommetCourant].getCoutTotal() > labels[arc.getOrigin().getId()].getCoutRealise() + this.data.getCost(arc)) {
+            else if (!labels[sommetCourant].getMarque() && labels[sommetCourant].getCoutRealise() > labels[arc.getOrigin().getId()].getCoutRealise() + this.data.getCost(arc)) {
             	heap.remove(labels[sommetCourant]);
               	labels[sommetCourant].setCoutRealise(labels[arc.getOrigin().getId()].getCoutRealise() + this.data.getCost(arc));
               	labels[sommetCourant].setPere(arc);
