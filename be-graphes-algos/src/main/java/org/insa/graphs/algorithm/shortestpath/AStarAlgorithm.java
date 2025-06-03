@@ -57,8 +57,10 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
                 heap.insert(nodeToTab);
            } 
             else if (labels[sommetCourant].getCoutTotal() > labels[arc.getOrigin().getId()].getCoutTotal() + arc.getMinimumTravelTime()) {
+                heap.remove(nodeToTab);
               	labels[sommetCourant].setCoutRealise(labels[arc.getOrigin().getId()].getCoutTotal() + arc.getMinimumTravelTime());
                 labels[sommetCourant].setPere(arc);
+                heap.insert(nodeToTab);
             }
         } else {
             if (labels[sommetCourant] == null) {
@@ -68,8 +70,10 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
                 heap.insert(nodeToTab);
            } 
             else if (labels[sommetCourant].getCoutTotal() > labels[arc.getOrigin().getId()].getCoutTotal() + arc.getLength()) {
+                heap.remove(nodeToTab);
               	labels[sommetCourant].setCoutRealise(labels[arc.getOrigin().getId()].getCoutTotal() + arc.getLength());
                 labels[sommetCourant].setPere(arc);
+                heap.insert(nodeToTab);
             }
         }
     }
