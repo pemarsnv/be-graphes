@@ -1,15 +1,10 @@
 package org.insa.graphs.algorithm.shortestpath;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import org.insa.graphs.algorithm.ArcInspectorFactory;
-import org.insa.graphs.algorithm.AbstractSolution.Status;
 import org.insa.graphs.model.io.BinaryGraphReader;
 import org.insa.graphs.model.io.GraphReader;
 import org.junit.Before;

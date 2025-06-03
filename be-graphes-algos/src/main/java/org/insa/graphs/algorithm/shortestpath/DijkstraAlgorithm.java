@@ -48,19 +48,29 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     
     public void treatArc(Arc arc) {
         int sommetCourant = arc.getDestination().getId();
-        if (labels[sommetCourant] == null) {
-        	if (this.data.getMode().equals(Mode.TIME)) {
-        		nodeToTab = new Label(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getMinimumTravelTime(), arc);
-        	} else {
+        
+        if (this.data.getMode().equals(Mode.TIME)) {
+        	if (labels[sommetCourant] == null) {
+            	nodeToTab = new Label(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getMinimumTravelTime(), arc);
+            	notifyNodeReached(data.getGraph().get(sommetCourant));
+                labels[sommetCourant] = nodeToTab;
+                heap.insert(nodeToTab);
+           } 
+            else if (labels[sommetCourant].getCoutTotal() > labels[arc.getOrigin().getId()].getCoutTotal() + arc.getMinimumTravelTime()) {
+              	labels[sommetCourant].setCoutRealise(labels[arc.getOrigin().getId()].getCoutTotal() + arc.getMinimumTravelTime());
+                labels[sommetCourant].setPere(arc);
+            }
+        } else {
+        	if (labels[sommetCourant] == null) {
         		nodeToTab = new Label(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength(), arc);
-        	}
-            notifyNodeReached(data.getGraph().get(sommetCourant));
-            labels[sommetCourant] = nodeToTab;
-            heap.insert(nodeToTab);
-       } 
-        else if (labels[sommetCourant].getCoutTotal() > labels[arc.getOrigin().getId()].getCoutTotal() + arc.getLength()) {
-          	labels[sommetCourant].setCoutRealise(labels[arc.getOrigin().getId()].getCoutTotal() + arc.getLength());
-            labels[sommetCourant].setPere(arc);
+            	notifyNodeReached(data.getGraph().get(sommetCourant));
+                labels[sommetCourant] = nodeToTab;
+                heap.insert(nodeToTab);
+           } 
+            else if (labels[sommetCourant].getCoutTotal() > labels[arc.getOrigin().getId()].getCoutTotal() + arc.getLength()) {
+              	labels[sommetCourant].setCoutRealise(labels[arc.getOrigin().getId()].getCoutTotal() + arc.getLength());
+                labels[sommetCourant].setPere(arc);
+            }
         }
     	
     }
