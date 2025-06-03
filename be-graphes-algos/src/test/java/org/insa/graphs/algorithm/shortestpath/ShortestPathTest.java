@@ -35,14 +35,17 @@ public class ShortestPathTest {
 		
 		//On fait tourner l'algo de Dijkstra à tester
 		ShortestPathAlgorithm algo = supplier.getAlgorithm(data);
-		ShortestPathSolution solutionD = algo.doRun();
+		ShortestPathSolution solutionD = algo.run();
 		
 		//On fait tourner l'algo de BF pour avoir la bonne solution 
 		BellmanFordAlgorithm bellman = new BellmanFordAlgorithm(data);
-		ShortestPathSolution solutionB = bellman.doRun();
+		ShortestPathSolution solutionB = bellman.run();
 		
 		//On vérifie que la soltuion est bien possible et 
 		//qu'elle est la même que celle trouvée par BellmanFord 
+		
+		System.out.println(solutionD.getSolvingTime());
+		System.out.println(solutionB.getSolvingTime());
 		assertEquals(solutionD.getStatus(), Status.OPTIMAL);
 		assertEquals(solutionD.getSolvingTime(), solutionB.getSolvingTime());
 			
@@ -62,11 +65,11 @@ public class ShortestPathTest {
 		
 		//On fait tourner l'algo de Dijkstra à tester
 		ShortestPathAlgorithm algo = supplier.getAlgorithm(data);
-		ShortestPathSolution solutionD = algo.doRun();
+		ShortestPathSolution solutionD = algo.run();
 		
 		//On fait tourner l'algo de BF pour avoir la bonne solution 
 		BellmanFordAlgorithm bellman = new BellmanFordAlgorithm(data);
-		ShortestPathSolution solutionB = bellman.doRun();
+		ShortestPathSolution solutionB = bellman.run();
 		
 		//On vérifie que la soltuion est bien possible et 
 		//qu'elle est la même que celle trouvée par BellmanFord 
@@ -114,7 +117,7 @@ public class ShortestPathTest {
 		
 		//On fait tourner l'algo de Dijkstra à tester
 		ShortestPathAlgorithm algo = supplier.getAlgorithm(data);
-		ShortestPathSolution solutionD = algo.doRun();
+		ShortestPathSolution solutionD = algo.run();
 		
 		//On vérifie que la solution est bien impossible
 		assertEquals(solutionD.getStatus(), Status.INFEASIBLE);
@@ -131,7 +134,7 @@ public class ShortestPathTest {
 		
 		//On fait tourner l'algo de Dijkstra à tester
 		ShortestPathAlgorithm algo = supplier.getAlgorithm(data);
-		ShortestPathSolution solutionD = algo.doRun();
+		ShortestPathSolution solutionD = algo.run();
 		
 		//On vérifie que la solution est bien impossible
 		assertEquals(solutionD.getStatus(), Status.INFEASIBLE);
@@ -151,11 +154,11 @@ public class ShortestPathTest {
 		
 		//On fait tourner l'algo de Dijkstra à tester
 		ShortestPathAlgorithm algo = supplier.getAlgorithm(data);
-		ShortestPathSolution solutionD = algo.doRun();
+		ShortestPathSolution solutionD = algo.run();
 		
 		//On fait tourner l'algo de BF pour avoir la bonne solution 
 		BellmanFordAlgorithm bellman = new BellmanFordAlgorithm(data);
-		ShortestPathSolution solutionB = bellman.doRun();
+		ShortestPathSolution solutionB = bellman.run();
 		
 		//On vérifie que la soltuion est bien possible et 
 		//qu'elle est la même que celle trouvée par BellmanFord 
@@ -177,11 +180,11 @@ public class ShortestPathTest {
 		
 		//On fait tourner l'algo de Dijkstra à tester
 		ShortestPathAlgorithm algo = supplier.getAlgorithm(data);
-		ShortestPathSolution solutionD = algo.doRun();
+		ShortestPathSolution solutionD = algo.run();
 		
 		//On fait tourner l'algo de BF pour avoir la bonne solution 
 		BellmanFordAlgorithm bellman = new BellmanFordAlgorithm(data);
-		ShortestPathSolution solutionB = bellman.doRun();
+		ShortestPathSolution solutionB = bellman.run();
 		
 		//On vérifie que la soltuion est bien possible et 
 		//qu'elle est la même que celle trouvée par BellmanFord 
@@ -226,7 +229,7 @@ public class ShortestPathTest {
 		
 		//On fait tourner l'algo de Dijkstra à tester
 		ShortestPathAlgorithm algo = supplier.getAlgorithm(data);
-		ShortestPathSolution solutionD = algo.doRun();
+		ShortestPathSolution solutionD = algo.run();
 		
 		//On vérifie que la solution est bien impossible
 		assertEquals(solutionD.getStatus(), Status.INFEASIBLE);

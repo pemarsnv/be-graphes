@@ -1,10 +1,15 @@
 package org.insa.graphs.algorithm.shortestpath;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import org.insa.graphs.algorithm.ArcInspectorFactory;
+import org.insa.graphs.algorithm.AbstractSolution.Status;
 import org.insa.graphs.model.io.BinaryGraphReader;
 import org.insa.graphs.model.io.GraphReader;
 import org.junit.Before;
@@ -30,17 +35,92 @@ public class DijkstraTest {
 	 * Teste le résultat de l'algorithme Dijkstra pour le chemin le plus court avec tous les chemins
 	 */
 	@Test
-	public void allTests() {
+	public void testShortestPathAll() {
 		
 		this.tests.testShortestPathAll();
+			
+	}
+	
+	/*
+	 * Teste le résultat de l'algorithme Dijkstra pour le chemin le plus court
+	 * parmi les chemins en voiture, et vérifie que le résultat est bien différent
+	 */
+	@Test
+	public void testShortestPathCar() {
+		
 		this.tests.testShortestPathCar();
+			
+	}
+	
+	/*
+	 * Teste que le résultat de l'algorithme de Dijkstra soit bien différent selon le type de chemins à 
+	 * prendre en Shortest si on est sur un chemin différent avec uniquement des routes en voiture 
+	 */
+	@Test
+	public void testShortestPathAllvsCar() {
+		
 		this.tests.testShortestPathAllvsCar();
+			
+	}
+	
+	/*
+	 * Teste qu'un chemin qui n'est pas faisable a bien le statut INFEASIBLE
+	 */
+	@Test
+	public void testNoPath() {
+		
 		this.tests.testNoPath();
+		
+	}
+	
+	@Test
+	public void testNoPathCar() {
+		
 		this.tests.testNoPathCar();
+		
+	}
+	
+	/*
+	 * Teste le résultat de l'algorithme Dijkstra pour le chemin le plus court avec tous les chemins
+	 */
+	@Test
+	public void testFastestPathAll() {
+		
 		this.tests.testFastestPathAll();
+			
+	}
+	
+	/*
+	 * Teste le résultat de l'algorithme Dijkstra pour le chemin le plus court avec tous les chemins
+	 */
+	@Test
+	public void testFastestPathPedestrian() {
+		
 		this.tests.testFastestPathPedestrian();
+			
+	}
+	
+	/*
+	 * Teste que le résultat de l'algorithme de Dijkstra soit bien différent selon le type de chemins à 
+	 * prendre en Shortest si on est sur un chemin différent avec uniquement des routes en voiture 
+	 */
+	@Test
+	public void testFastestPathAllvsPedestrian() {
+		
 		this.tests.testFastestPathAllvsPedestrian();
+			
+	}
+	
+	@Test
+	public void testNoPathPedestrian() {
+		
 		this.tests.testNoPathPedestrian();
+		
+	}
+	
+	@Test
+	public void testShortestFastestDifferent() {
+		
 		this.tests.testShortestFastestDifferent();
 			
 	}
