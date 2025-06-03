@@ -33,7 +33,12 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
     	this.labels = new LabelStar[nb];
         this.heap = new BinaryHeap<Label>();
         
-        nodeToTab = new LabelStar(data.getOrigin(), false, 0, null, data.getOrigin());
+        if (this.data.getMode().equals(Mode.TIME)) {
+        	nodeToTab = new LabelStar(data.getOrigin(), false, 0, null, data.getOrigin(), this.data.getMaximumSpeed());
+        } else {
+        	nodeToTab = new LabelStar(data.getOrigin(), false, 0, null, data.getOrigin(), -1);
+        }
+        
         this.insertLabel(nodeToTab);
         heap.insert(nodeToTab);
         destination = data.getDestination().getId();
@@ -48,7 +53,7 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
         int sommetCourant = arc.getDestination().getId();
         if (this.data.getMode().equals(Mode.TIME)) {
         	if (labels[sommetCourant] == null) {
-            	this.nodeToTab = new LabelStar(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + this.data.getCost(arc), arc, data.getDestination());
+            	this.nodeToTab = new LabelStar(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + this.data.getCost(arc), arc, data.getDestination(), this.data.getMaximumSpeed());
          	    notifyNodeReached(data.getGraph().get(sommetCourant));
                 labels[sommetCourant] = nodeToTab;
                 heap.insert(nodeToTab);
@@ -61,7 +66,7 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
             }
         } else {
             if (labels[sommetCourant] == null) {
-        		nodeToTab = new LabelStar(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + this.data.getCost(arc), arc, data.getDestination());
+        		nodeToTab = new LabelStar(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + this.data.getCost(arc), arc, data.getDestination(), -1);
          	    notifyNodeReached(data.getGraph().get(sommetCourant));
                 labels[sommetCourant] = nodeToTab;
                 heap.insert(nodeToTab);
