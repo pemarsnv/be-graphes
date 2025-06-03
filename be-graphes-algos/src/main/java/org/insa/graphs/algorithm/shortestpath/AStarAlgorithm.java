@@ -51,27 +51,27 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
         int sommetCourant = arc.getDestination().getId();
         if (this.data.getMode().equals(Mode.TIME)) {
         	if (labels[sommetCourant] == null) {
-            	this.nodeToTab = new LabelStar(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getMinimumTravelTime(), arc, data.getDestination());
+            	this.nodeToTab = new LabelStar(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + this.data.getCost(arc), arc, data.getDestination());
          	    notifyNodeReached(data.getGraph().get(sommetCourant));
                 labels[sommetCourant] = nodeToTab;
                 heap.insert(nodeToTab);
            } 
-            else if (labels[sommetCourant].getCoutTotal() > labels[arc.getOrigin().getId()].getCoutTotal() + arc.getMinimumTravelTime()) {
+            else if (labels[sommetCourant].getCoutTotal() > labels[arc.getOrigin().getId()].getCoutTotal() + this.data.getCost(arc)) {
                 heap.remove(nodeToTab);
-              	labels[sommetCourant].setCoutRealise(labels[arc.getOrigin().getId()].getCoutTotal() + arc.getMinimumTravelTime());
+              	labels[sommetCourant].setCoutRealise(labels[arc.getOrigin().getId()].getCoutTotal() + this.data.getCost(arc));
                 labels[sommetCourant].setPere(arc);
                 heap.insert(nodeToTab);
             }
         } else {
             if (labels[sommetCourant] == null) {
-        		nodeToTab = new LabelStar(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength(), arc, data.getDestination());
+        		nodeToTab = new LabelStar(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + this.data.getCost(arc), arc, data.getDestination());
          	    notifyNodeReached(data.getGraph().get(sommetCourant));
                 labels[sommetCourant] = nodeToTab;
                 heap.insert(nodeToTab);
            } 
-            else if (labels[sommetCourant].getCoutTotal() > labels[arc.getOrigin().getId()].getCoutTotal() + arc.getLength()) {
+            else if (labels[sommetCourant].getCoutTotal() > labels[arc.getOrigin().getId()].getCoutTotal() + this.data.getCost(arc)) {
                 heap.remove(nodeToTab);
-              	labels[sommetCourant].setCoutRealise(labels[arc.getOrigin().getId()].getCoutTotal() + arc.getLength());
+              	labels[sommetCourant].setCoutRealise(labels[arc.getOrigin().getId()].getCoutTotal() + this.data.getCost(arc));
                 labels[sommetCourant].setPere(arc);
                 heap.insert(nodeToTab);
             }
