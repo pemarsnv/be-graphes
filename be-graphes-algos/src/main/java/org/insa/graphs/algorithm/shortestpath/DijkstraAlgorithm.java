@@ -30,12 +30,9 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     public void initiliazeLabels(int nb) {
     	
     	this.labels = new Label[nb];
-        for (int i = 0; i < nb; i++) {
-            labels[i] = null;
-        }
         this.heap = new BinaryHeap <Label>();
         
-        Label nodeToTab = new Label(data.getOrigin(), false, 0, null);
+        this.nodeToTab = new Label(data.getOrigin(), false, 0, null);
         this.insertLabel(nodeToTab);
         heap.insert(nodeToTab); 
         destination = data.getDestination().getId();
@@ -47,6 +44,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     }
     
     public void treatArc(Arc arc) {
+    	
         int sommetCourant = arc.getDestination().getId();
         
         if (this.data.getMode().equals(Mode.TIME)) {
@@ -56,20 +54,24 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                 labels[sommetCourant] = nodeToTab;
                 heap.insert(nodeToTab);
            } 
-            else if (labels[sommetCourant].getCoutTotal() > labels[arc.getOrigin().getId()].getCoutTotal() + arc.getMinimumTravelTime()) {
-              	labels[sommetCourant].setCoutRealise(labels[arc.getOrigin().getId()].getCoutTotal() + arc.getMinimumTravelTime());
+            else if (!labels[sommetCourant].getMarque() && labels[sommetCourant].getCoutRealise() > labels[arc.getOrigin().getId()].getCoutRealise() + arc.getMinimumTravelTime()) {
+              	heap.remove(labels[sommetCourant]);
+            	labels[sommetCourant].setCoutRealise(labels[arc.getOrigin().getId()].getCoutRealise() + arc.getMinimumTravelTime());
                 labels[sommetCourant].setPere(arc);
+                heap.insert(labels[sommetCourant]);
             }
         } else {
         	if (labels[sommetCourant] == null) {
         		nodeToTab = new Label(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength(), arc);
             	notifyNodeReached(data.getGraph().get(sommetCourant));
                 labels[sommetCourant] = nodeToTab;
-                heap.insert(nodeToTab);
+                heap.insert(labels[sommetCourant]);
            } 
-            else if (labels[sommetCourant].getCoutTotal() > labels[arc.getOrigin().getId()].getCoutTotal() + arc.getLength()) {
-              	labels[sommetCourant].setCoutRealise(labels[arc.getOrigin().getId()].getCoutTotal() + arc.getLength());
+            else if (!labels[sommetCourant].getMarque() && labels[sommetCourant].getCoutRealise() > labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength()) {
+              	heap.remove(labels[sommetCourant]);
+            	labels[sommetCourant].setCoutRealise(labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength());
                 labels[sommetCourant].setPere(arc);
+                heap.insert(labels[sommetCourant]);
             }
         }
     	
@@ -110,7 +112,6 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         //On regarde si le sommet destination est atteint
         destination = data.getDestination().getId();
         Status status = Status.OPTIMAL;
-        Arc currentArc;
         List<Arc> path = new ArrayList<Arc>();
         
         if (labels[destination] == null) {
@@ -119,14 +120,12 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         	
         	notifyDestinationReached(data.getGraph().get(destination));
         	
-        	currentArc = labels[destination].getPere();
+        	Arc currentArc = labels[destination].getPere();
 
             while (currentArc != null) {
                 path.add(currentArc);
                 currentArc = labels[currentArc.getOrigin().getId()].getPere();
             }
-
-            //reverse the path
             Collections.reverse(path);
             
         }

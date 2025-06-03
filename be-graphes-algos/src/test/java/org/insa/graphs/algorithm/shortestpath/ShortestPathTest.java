@@ -44,10 +44,8 @@ public class ShortestPathTest {
 		//On vérifie que la soltuion est bien possible et 
 		//qu'elle est la même que celle trouvée par BellmanFord 
 		
-		System.out.println(solutionD.getSolvingTime());
-		System.out.println(solutionB.getSolvingTime());
 		assertEquals(solutionD.getStatus(), Status.OPTIMAL);
-		assertEquals(solutionD.getSolvingTime(), solutionB.getSolvingTime());
+		assertEquals(solutionD.getPath().getArcs(), solutionB.getPath().getArcs());
 			
 	}
 	
@@ -74,7 +72,7 @@ public class ShortestPathTest {
 		//On vérifie que la soltuion est bien possible et 
 		//qu'elle est la même que celle trouvée par BellmanFord 
 		assertEquals(solutionD.getStatus(), Status.OPTIMAL);
-		assertEquals(solutionD.getSolvingTime(), solutionB.getSolvingTime());
+		assertEquals(solutionD.getPath().getArcs(), solutionB.getPath().getArcs());
 			
 	}
 	
@@ -100,7 +98,7 @@ public class ShortestPathTest {
 		
 		//On vérifie que la soltuion est bien possible et 
 		//qu'elle est la même que celle trouvée par BellmanFord 
-		assertNotEquals(solutionC.getSolvingTime(), solutionA.getSolvingTime());
+		assertNotEquals(solutionA.getPath().getArcs(), solutionC.getPath().getArcs());
 			
 	}
 	
@@ -163,7 +161,7 @@ public class ShortestPathTest {
 		//On vérifie que la soltuion est bien possible et 
 		//qu'elle est la même que celle trouvée par BellmanFord 
 		assertEquals(solutionD.getStatus(), Status.OPTIMAL);
-		assertEquals(solutionD.getSolvingTime(), solutionB.getSolvingTime());
+		assertEquals(solutionD.getPath().getArcs(), solutionB.getPath().getArcs());
 			
 	}
 	
@@ -189,7 +187,7 @@ public class ShortestPathTest {
 		//On vérifie que la soltuion est bien possible et 
 		//qu'elle est la même que celle trouvée par BellmanFord 
 		assertEquals(solutionD.getStatus(), Status.OPTIMAL);
-		assertEquals(solutionD.getSolvingTime(), solutionB.getSolvingTime());
+		assertEquals(solutionD.getPath().getArcs(), solutionB.getPath().getArcs());
 			
 	}
 	
@@ -215,7 +213,7 @@ public class ShortestPathTest {
 		
 		//On vérifie que la soltuion est bien possible et 
 		//qu'elle est la même que celle trouvée par BellmanFord 
-		assertNotEquals(solutionC.getSolvingTime(), solutionA.getSolvingTime());
+		assertNotEquals(solutionA.getPath().getArcs(), solutionC.getPath().getArcs());
 			
 	}
 	
@@ -254,7 +252,7 @@ public class ShortestPathTest {
 		
 		//On vérifie que la soltuion est bien possible et 
 		//qu'elle est la même que celle trouvée par BellmanFord 
-		assertNotEquals(solutionS.getSolvingTime(), solutionF.getSolvingTime());
+		assertNotEquals(solutionS.getPath().getArcs(), solutionF.getPath().getArcs());
 			
 	}
 
