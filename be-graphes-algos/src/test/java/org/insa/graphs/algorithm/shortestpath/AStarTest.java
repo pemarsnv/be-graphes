@@ -117,7 +117,7 @@ public class AStarTest {
 	public void testShortestFastestDifferent() {
 		
 		this.tests.testShortestFastestDifferent();
-			
+		
 	}
 	
 }

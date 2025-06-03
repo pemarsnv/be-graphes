@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.insa.graphs.algorithm.AbstractInputData.Mode;
 import org.insa.graphs.algorithm.AbstractSolution.Status;
 import org.insa.graphs.algorithm.utils.BinaryHeap;
 import org.insa.graphs.model.Arc;
@@ -49,8 +50,12 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
     public void treatArc(Arc arc) {
         int sommetCourant = arc.getDestination().getId();
         if (labels[sommetCourant] == null) {
-            this.nodeToTab = new LabelStar(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength(), arc, data.getDestination());
-         	notifyNodeReached(data.getGraph().get(sommetCourant));
+            if (this.data.getMode().equals(Mode.TIME)) {
+        		this.nodeToTab = new LabelStar(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getMinimumTravelTime(), arc, data.getDestination());
+         	} else {
+        		this.nodeToTab = new LabelStar(arc.getDestination(), false, labels[arc.getOrigin().getId()].getCoutRealise() + arc.getLength(), arc, data.getDestination());
+         	}
+            notifyNodeReached(data.getGraph().get(sommetCourant));
             labels[sommetCourant] = nodeToTab;
             heap.insert(nodeToTab);
        } 
