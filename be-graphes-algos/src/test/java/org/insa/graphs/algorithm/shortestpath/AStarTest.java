@@ -39,7 +39,7 @@ public class AStarTest {
 		this.tests.testFastestPathAllvsPedestrian();
 		this.tests.testNoPathPedestrian();
 		this.tests.testShortestFastestDifferent();
-			
+		
 	}
 	
 }
