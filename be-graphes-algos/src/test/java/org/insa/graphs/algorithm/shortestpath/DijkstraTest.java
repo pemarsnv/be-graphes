@@ -24,6 +24,11 @@ public class DijkstraTest {
 				new BufferedInputStream(new FileInputStream(mapName))));
 		this.tests.graph = reader.read();
 		
+		String mapName2 = "../maps/haute-garonne.mapgr";
+		GraphReader reader2 = new BinaryGraphReader(new DataInputStream(
+				new BufferedInputStream(new FileInputStream(mapName2))));
+		this.tests.graph2 = reader2.read();
+		
 	}
 
 	/*

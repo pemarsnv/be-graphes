@@ -15,6 +15,8 @@ public class ShortestPathTest {
 	private Node origin;
 	private Node destination;
 	
+	protected Graph graph2;
+	
 	private AlgorithmSupplier supplier;
 	
 	public ShortestPathTest (AlgorithmSupplier supplier) {
@@ -22,82 +24,130 @@ public class ShortestPathTest {
     }
 
 	/*
-	 * Teste le résultat de l'algorithme Dijkstra pour le chemin le plus court
+	 * Teste le résultat de l'algorithme pour le chemin le plus COURT
 	 * parmi tous les chemins disponibles
 	 */
 	@Test
 	public void testShortestPathAll() {
 		
-		this.origin = graph.get(5);
-		this.destination = graph.get(413);
+		//avec la carte de l'insa
+		
+		this.origin = this.graph.get(5);
+		this.destination = this.graph.get(413);
 		
 		this.data = new ShortestPathData(graph, origin, destination, ArcInspectorFactory.getAllFilters().get(0));
 		
-		//On fait tourner l'algo de Dijkstra à tester
+		//on fait tourner l'algo à tester
 		ShortestPathAlgorithm algo = supplier.getAlgorithm(data);
-		ShortestPathSolution solutionD = algo.run();
+		ShortestPathSolution solution = algo.run();
 		
-		//On fait tourner l'algo de BF pour avoir la bonne solution 
+		//on fait tourner l'algo de BF pour avoir la bonne solution 
 		BellmanFordAlgorithm bellman = new BellmanFordAlgorithm(data);
 		ShortestPathSolution solutionB = bellman.run();
 		
-		//On vérifie que la soltuion est bien possible et 
+		//on vérifie que la solution est bien possible et 
 		//qu'elle est la même que celle trouvée par BellmanFord 
 		
-		assertEquals(solutionD.getStatus(), Status.OPTIMAL);
-		assertEquals(solutionD.getPath().getArcs(), solutionB.getPath().getArcs());
+		assertEquals(solution.getStatus(), Status.OPTIMAL);
+		assertEquals(solution.getPath().getArcs(), solutionB.getPath().getArcs());
+		
+		//même chose avec la carte de la haute garonne
+		
+		this.origin = this.graph2.get(114824);
+		this.destination = this.graph2.get(19626);
+		
+		this.data = new ShortestPathData(graph2, origin, destination, ArcInspectorFactory.getAllFilters().get(0));
+		
+		algo = supplier.getAlgorithm(data);
+		solution = algo.run();
+		
+		bellman = new BellmanFordAlgorithm(data);
+		solutionB = bellman.run();
+		
+		assertEquals(solution.getStatus(), Status.OPTIMAL);
+		assertEquals(solution.getPath().getArcs(), solutionB.getPath().getArcs());
 			
 	}
 	
 	/*
-	 * Teste le résultat de l'algorithme Dijkstra pour le chemin le plus court
-	 * parmi les chemins en voiture, et vérifie que le résultat est bien différent
+	 * Teste le résultat de l'algorithme pour le chemin le plus COURT
+	 * en voiture parmi tous les chemins disponibles
 	 */
 	@Test
 	public void testShortestPathCar() {
 		
-		this.origin = graph.get(66);
-		this.destination = graph.get(207);
+		//avec la carte de l'insa
+		
+		this.origin = this.graph.get(66);
+		this.destination = this.graph.get(207);
 		
 		this.data = new ShortestPathData(graph, origin, destination, ArcInspectorFactory.getAllFilters().get(1));
+
+		ShortestPathAlgorithm algo = this.supplier.getAlgorithm(data);
+		ShortestPathSolution solution = algo.run();
 		
-		//On fait tourner l'algo de Dijkstra à tester
-		ShortestPathAlgorithm algo = supplier.getAlgorithm(data);
-		ShortestPathSolution solutionD = algo.run();
-		
-		//On fait tourner l'algo de BF pour avoir la bonne solution 
 		BellmanFordAlgorithm bellman = new BellmanFordAlgorithm(data);
 		ShortestPathSolution solutionB = bellman.run();
 		
-		//On vérifie que la soltuion est bien possible et 
-		//qu'elle est la même que celle trouvée par BellmanFord 
-		assertEquals(solutionD.getStatus(), Status.OPTIMAL);
-		assertEquals(solutionD.getPath().getArcs(), solutionB.getPath().getArcs());
+		assertEquals(solution.getStatus(), Status.OPTIMAL);
+		assertEquals(solution.getPath().getArcs(), solutionB.getPath().getArcs());
+		
+		//même chose avec la carte de la haute garonne
+		
+		this.origin = this.graph2.get(114824);
+		this.destination = this.graph2.get(19626);
+		
+		this.data = new ShortestPathData(graph2, origin, destination, ArcInspectorFactory.getAllFilters().get(1));
+		
+		algo = this.supplier.getAlgorithm(data);
+		solution = algo.run();
+		
+		bellman = new BellmanFordAlgorithm(data);
+		solutionB = bellman.run();
+		
+		assertEquals(solution.getStatus(), Status.OPTIMAL);
+		assertEquals(solution.getPath().getArcs(), solutionB.getPath().getArcs());
 			
 	}
 	
 	/*
-	 * Teste que le résultat de l'algorithme de Dijkstra soit bien différent selon le type de chemins à 
-	 * prendre en Shortest si on est sur un chemin différent avec uniquement des routes en voiture 
+	 * Teste que le résultat de l'algorithme en mode shortest soit bien différent selon le type de chemins à 
+	 * prendre (voiture, tout) pour une trajectoire qui serait différente uniquement en voiture 
 	 */
 	@Test
 	public void testShortestPathAllvsCar() {
 		
+		//avec la carte de l'insa
+		
 		this.origin = graph.get(66);
 		this.destination = graph.get(207);
 		
-		//On fait tourner l'algo de Dijkstra en shortest all
+		//on fait tourner l'algo en shortest all
 		this.data = new ShortestPathData(graph, origin, destination, ArcInspectorFactory.getAllFilters().get(0));
 		ShortestPathAlgorithm algo = supplier.getAlgorithm(data);
 		ShortestPathSolution solutionA = algo.run();
 		
-		//On fait tourner l'algo de Dijkstra en shortest cars only
+		//on fait tourner l'algo en shortest cars only
 		this.data = new ShortestPathData(graph, origin, destination, ArcInspectorFactory.getAllFilters().get(1));
 		algo = supplier.getAlgorithm(data);
 		ShortestPathSolution solutionC = algo.run();
 		
-		//On vérifie que la soltuion est bien possible et 
-		//qu'elle est la même que celle trouvée par BellmanFord 
+		//on vérifie que les solutions sont bien différentes
+		assertNotEquals(solutionA.getPath().getArcs(), solutionC.getPath().getArcs());
+		
+		//même chose avec la carte de la haute garonne
+		
+		this.origin = this.graph2.get(114824);
+		this.destination = this.graph2.get(19626);
+		
+		this.data = new ShortestPathData(graph2, origin, destination, ArcInspectorFactory.getAllFilters().get(0));
+		algo = supplier.getAlgorithm(data);
+		solutionA = algo.run();
+		
+		this.data = new ShortestPathData(graph2, origin, destination, ArcInspectorFactory.getAllFilters().get(1));
+		algo = supplier.getAlgorithm(data);
+		solutionC = algo.run();
+		
 		assertNotEquals(solutionA.getPath().getArcs(), solutionC.getPath().getArcs());
 			
 	}
@@ -108,39 +158,70 @@ public class ShortestPathTest {
 	@Test
 	public void testNoPath() {
 		
+		//avec la carte de l'insa
+		
 		this.origin = graph.get(100);
 		this.destination = graph.get(1282);
 		
 		this.data = new ShortestPathData(graph, origin, destination, ArcInspectorFactory.getAllFilters().get(0));
 		
-		//On fait tourner l'algo de Dijkstra à tester
+		//on fait tourner l'algorithme
 		ShortestPathAlgorithm algo = supplier.getAlgorithm(data);
-		ShortestPathSolution solutionD = algo.run();
+		ShortestPathSolution solution = algo.run();
 		
-		//On vérifie que la solution est bien impossible
-		assertEquals(solutionD.getStatus(), Status.INFEASIBLE);
+		//on vérifie que le statut de la solution est bien INFEASIBLE
+		assertEquals(solution.getStatus(), Status.INFEASIBLE);
+		
+		//avec la carte de la haute garonne
+		
+		this.origin = graph2.get(68269);
+		this.destination = graph2.get(135933);
+				
+		this.data = new ShortestPathData(graph2, origin, destination, ArcInspectorFactory.getAllFilters().get(0));
+
+		algo = supplier.getAlgorithm(data);
+		solution = algo.run();
+		
+		assertEquals(solution.getStatus(), Status.INFEASIBLE);
 		
 	}
 	
+	/*
+	 * Teste qu'un chemin qui n'est pas faisable en voiture a bien le statut INFEASIBLE
+	 * si on lance l'algorithme en Shortest Car Only
+	 */
 	@Test
 	public void testNoPathCar() {
+		
+		//avec la carte de l'insa
 		
 		this.origin = graph.get(5);
 		this.destination = graph.get(413);
 		
 		this.data = new ShortestPathData(graph, origin, destination, ArcInspectorFactory.getAllFilters().get(1));
-		
-		//On fait tourner l'algo de Dijkstra à tester
+
 		ShortestPathAlgorithm algo = supplier.getAlgorithm(data);
-		ShortestPathSolution solutionD = algo.run();
+		ShortestPathSolution solution = algo.run();
 		
-		//On vérifie que la solution est bien impossible
-		assertEquals(solutionD.getStatus(), Status.INFEASIBLE);
+		assertEquals(solution.getStatus(), Status.INFEASIBLE);
+		
+		//avec la carte de la haute garonne
+		
+		this.origin = graph2.get(68269);
+		this.destination = graph2.get(135933);
+		
+		this.data = new ShortestPathData(graph2, origin, destination, ArcInspectorFactory.getAllFilters().get(1));
+		
+		algo = supplier.getAlgorithm(data);
+		solution = algo.run();
+		
+		assertEquals(solution.getStatus(), Status.INFEASIBLE);
 		
 	}
 	
 	/*
-	 * Teste le résultat de l'algorithme Dijkstra pour le chemin le plus court avec tous les chemins
+	 * Teste le résultat de l'algorithme pour le chemin le plus RAPIDE
+	 * parmi tous les chemins disponibles
 	 */
 	@Test
 	public void testFastestPathAll() {
@@ -150,25 +231,40 @@ public class ShortestPathTest {
 		
 		this.data = new ShortestPathData(graph, origin, destination, ArcInspectorFactory.getAllFilters().get(2));
 		
-		//On fait tourner l'algo de Dijkstra à tester
+		//on fait tourner l'algo à tester
 		ShortestPathAlgorithm algo = supplier.getAlgorithm(data);
-		ShortestPathSolution solutionD = algo.run();
+		ShortestPathSolution solution = algo.run();
 		
-		//On fait tourner l'algo de BF pour avoir la bonne solution 
+		//on fait tourner l'algo de BF pour avoir la bonne solution 
 		BellmanFordAlgorithm bellman = new BellmanFordAlgorithm(data);
 		ShortestPathSolution solutionB = bellman.run();
 		
-		//On vérifie que la soltuion est bien possible et 
+		//on vérifie que la solution est bien possible et 
 		//qu'elle est la même que celle trouvée par BellmanFord 
-		assertEquals(solutionD.getStatus(), Status.OPTIMAL);
-		System.out.println(solutionD.getPath().getArcs());
-		System.out.println(solutionB.getPath().getArcs());
-		assertEquals(solutionD.getPath().getArcs(), solutionB.getPath().getArcs());
+		assertEquals(solution.getStatus(), Status.OPTIMAL);
+		assertEquals(solution.getPath().getArcs(), solutionB.getPath().getArcs());
+		
+		//même chose avec la carte de la haute garonne
+		
+		this.origin = this.graph2.get(114824);
+		this.destination = this.graph2.get(19626);
+				
+		this.data = new ShortestPathData(graph2, origin, destination, ArcInspectorFactory.getAllFilters().get(2));
+				
+		algo = supplier.getAlgorithm(data);
+		solution = algo.run();
+				
+		bellman = new BellmanFordAlgorithm(data);
+		solutionB = bellman.run();
+				
+		assertEquals(solution.getStatus(), Status.OPTIMAL);
+		assertEquals(solution.getPath().getArcs(), solutionB.getPath().getArcs());
 			
 	}
 	
 	/*
-	 * Teste le résultat de l'algorithme Dijkstra pour le chemin le plus court avec tous les chemins
+	 * Teste le résultat de l'algorithme pour le chemin le plus RAPIDE
+	 * parmi tous les chemins possibles pour un piéton
 	 */
 	@Test
 	public void testFastestPathPedestrian() {
@@ -178,66 +274,116 @@ public class ShortestPathTest {
 		
 		this.data = new ShortestPathData(graph, origin, destination, ArcInspectorFactory.getAllFilters().get(3));
 		
-		//On fait tourner l'algo de Dijkstra à tester
+		//On fait tourner l'algo à tester
 		ShortestPathAlgorithm algo = supplier.getAlgorithm(data);
-		ShortestPathSolution solutionD = algo.run();
+		ShortestPathSolution solution = algo.run();
 		
 		//On fait tourner l'algo de BF pour avoir la bonne solution 
 		BellmanFordAlgorithm bellman = new BellmanFordAlgorithm(data);
 		ShortestPathSolution solutionB = bellman.run();
 		
-		//On vérifie que la soltuion est bien possible et 
+		//On vérifie que la solution est bien possible et 
 		//qu'elle est la même que celle trouvée par BellmanFord 
-		assertEquals(solutionD.getStatus(), Status.OPTIMAL);
-		System.out.println(solutionD.getPath().getArcs());
-		System.out.println(solutionB.getPath().getArcs());
-		assertEquals(solutionD.getPath().getArcs(), solutionB.getPath().getArcs());
+		assertEquals(solution.getStatus(), Status.OPTIMAL);
+		assertEquals(solution.getPath().getArcs(), solutionB.getPath().getArcs());
+		
+		//même chose avec la carte de la haute garonne
+		
+		this.origin = this.graph2.get(114824);
+		this.destination = this.graph2.get(19626);
+						
+		this.data = new ShortestPathData(graph2, origin, destination, ArcInspectorFactory.getAllFilters().get(3));
+				
+		algo = supplier.getAlgorithm(data);
+		solution = algo.run();
+						
+		bellman = new BellmanFordAlgorithm(data);
+		solutionB = bellman.run();
+						
+		assertEquals(solution.getStatus(), Status.OPTIMAL);
+		assertEquals(solution.getPath().getArcs(), solutionB.getPath().getArcs());
 			
 	}
 	
 	/*
-	 * Teste que le résultat de l'algorithme de Dijkstra soit bien différent selon le type de chemins à 
-	 * prendre en Shortest si on est sur un chemin différent avec uniquement des routes en voiture 
+	 * Teste que le résultat de l'algorithme en mode fastest soit bien différent selon le type de chemins à 
+	 * prendre (piéton, tout) pour une trajectoire qui serait différente pour quelqu'un uniquement à pied
 	 */
 	@Test
 	public void testFastestPathAllvsPedestrian() {
 		
+		//avec la carte de l'insa
+		
 		this.origin = graph.get(878);
 		this.destination = graph.get(252);
 		
-		//On fait tourner l'algo de Dijkstra en shortest all
+		//On fait tourner l'algo en fastest all
 		this.data = new ShortestPathData(graph, origin, destination, ArcInspectorFactory.getAllFilters().get(2));
 		ShortestPathAlgorithm algo = supplier.getAlgorithm(data);
 		ShortestPathSolution solutionA = algo.run();
 		
-		//On fait tourner l'algo de Dijkstra en shortest cars only
+		//On fait tourner l'algo en fastest pedestrian only
 		this.data = new ShortestPathData(graph, origin, destination, ArcInspectorFactory.getAllFilters().get(3));
 		algo = supplier.getAlgorithm(data);
-		ShortestPathSolution solutionC = algo.run();
+		ShortestPathSolution solutionP = algo.run();
 		
-		//On vérifie que la soltuion est bien possible et 
-		//qu'elle est la même que celle trouvée par BellmanFord 
-		assertNotEquals(solutionA.getPath().getArcs(), solutionC.getPath().getArcs());
+		//on vérifie que les deux solutions sont différentes
+		assertNotEquals(solutionA.getPath().getArcs(), solutionP.getPath().getArcs());
+		
+		//même chose avec la carte de la haute garonne
+		
+		this.origin = graph2.get(878);
+		this.destination = graph2.get(252);
+		
+		this.data = new ShortestPathData(graph2, origin, destination, ArcInspectorFactory.getAllFilters().get(2));
+		algo = supplier.getAlgorithm(data);
+		solutionA = algo.run();
+		
+		this.data = new ShortestPathData(graph2, origin, destination, ArcInspectorFactory.getAllFilters().get(3));
+		algo = supplier.getAlgorithm(data);
+		solutionP = algo.run();
+	
+		assertNotEquals(solutionA.getPath().getArcs(), solutionP.getPath().getArcs());
 			
 	}
 	
+	/*
+	 * Teste qu'un chemin qui n'est pas faisable à pied a bien le statut INFEASIBLE
+	 * si on lance l'algorithme en Fastest Pedestrian Only
+	 */
 	@Test
 	public void testNoPathPedestrian() {
 		
 		this.origin = graph.get(731);
 		this.destination = graph.get(413);
 		
-		this.data = new ShortestPathData(graph, origin, destination, ArcInspectorFactory.getAllFilters().get(1));
+		this.data = new ShortestPathData(graph, origin, destination, ArcInspectorFactory.getAllFilters().get(3));
 		
 		//On fait tourner l'algo de Dijkstra à tester
 		ShortestPathAlgorithm algo = supplier.getAlgorithm(data);
-		ShortestPathSolution solutionD = algo.run();
+		ShortestPathSolution solution = algo.doRun();
 		
 		//On vérifie que la solution est bien impossible
-		assertEquals(solutionD.getStatus(), Status.INFEASIBLE);
+		assertEquals(solution.getStatus(), Status.INFEASIBLE);
+	
+		this.origin = graph2.get(68269);
+		this.destination = graph2.get(135933);
+		
+		this.data = new ShortestPathData(graph2, origin, destination, ArcInspectorFactory.getAllFilters().get(3));
+		
+		//On fait tourner l'algo de Dijkstra à tester
+		algo = supplier.getAlgorithm(data);
+		solution = algo.run();
+		
+		//On vérifie que la solution est bien impossible
+		assertEquals(solution.getStatus(), Status.INFEASIBLE);
 		
 	}
 	
+	/*
+	 * Teste que le résultat de l'algorithme en mode fastest et shortest pour une trajectoire qui 
+	 * serait différente selon le besoin exprimé ici 
+	 */
 	@Test
 	public void testShortestFastestDifferent() {
 		
@@ -253,6 +399,24 @@ public class ShortestPathTest {
 		this.data = new ShortestPathData(graph, origin, destination, ArcInspectorFactory.getAllFilters().get(2));
 		algo = supplier.getAlgorithm(data);
 		ShortestPathSolution solutionF = algo.run();
+		
+		//On vérifie que la soltuion est bien possible et 
+		//qu'elle est la même que celle trouvée par BellmanFord 
+		assertNotEquals(solutionS.getPath().getArcs(), solutionF.getPath().getArcs());
+		
+		//même chose avec la haute garonne
+		
+		this.origin = graph2.get(114824);
+		this.destination = graph2.get(19626);
+
+		this.data = new ShortestPathData(graph2, origin, destination, ArcInspectorFactory.getAllFilters().get(0));
+		algo = supplier.getAlgorithm(data);
+		solutionS = algo.run();
+		
+		//On fait tourner l'algo de Dijkstra à tester en fastest
+		this.data = new ShortestPathData(graph2, origin, destination, ArcInspectorFactory.getAllFilters().get(2));
+		algo = supplier.getAlgorithm(data);
+		solutionF = algo.run();
 		
 		//On vérifie que la soltuion est bien possible et 
 		//qu'elle est la même que celle trouvée par BellmanFord 

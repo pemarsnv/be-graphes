@@ -9,6 +9,12 @@ public class LabelStar extends Label {
 	private Node destination;
 	private int maxSpeed;
 
+	public LabelStar(Node node, boolean marque, double coutRealise, Arc pere, Node destination) {
+		super(node, marque, coutRealise, pere);
+		this.destination = destination;
+		this.maxSpeed = -1;
+	}
+	
 	public LabelStar(Node node, boolean marque, double coutRealise, Arc pere, Node destination, int maxSpeed) {
 		super(node, marque, coutRealise, pere);
 		this.destination = destination;
